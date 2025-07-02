@@ -1,69 +1,72 @@
-# React + TypeScript + Vite
+# React Authentication App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Introduction
 
-Currently, two official plugins are available:
+Welcome to the React Authentication frontend, a secure authentication system implementing HTTP-only cookie-based refresh tokens and localStorage access tokens. This implementation follows security best practices for web authentication.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Secure Authentication**: Using HTTP-only cookies for refresh tokens and localStorage for access tokens
+- **Protected Routes**: Restricting access to authenticated users only
+- **Token Auto-Refresh**: Seamless token refresh mechanism
+- **Login/Register/Logout**: Complete authentication flow
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+This application is built using the following technologies:
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- **React**: Frontend JavaScript library
+- **Redux Toolkit**: State management
+- **Axios**: HTTP client for API requests
+- **Ant Design**: UI component library
+- **TypeScript**: Type-safe JavaScript
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Authentication Security
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The authentication system implements a secure approach:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Access Tokens**: Stored in localStorage for short-lived authentication
+- **Refresh Tokens**: Stored as HTTP-only cookies, making them inaccessible to JavaScript and protected against XSS attacks
+- **Auto Refresh**: Automatic token refresh when access tokens expire
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Getting Started
+
+Follow these instructions to run the project locally:
+
+1. Clone the project repository to your local machine:
+
+   ```bash
+   git clone <repository_url>
+   cd <project_directory>
+   ```
+
+2. Create a `.env` file in the project root and configure the following environment variables:
+
+   ```bash
+   VITE_ENV_API_BASE_URL=http://localhost:5000
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   yarn install
+   ```
+
+4. Start the development server:
+
+   ```bash
+   yarn dev
+   ```
+
+The application will be available at `http://localhost:5173`
+
+## API Integration
+
+This frontend is designed to work with a NestJS backend that uses secure cookie-based authentication. The backend should:
+
+1. Set HTTP-only cookies for refresh tokens when users login/register
+2. Clear the cookies on logout
+3. Return new access tokens during the refresh token flow
+
+
+
