@@ -7,7 +7,7 @@ import { Button, Form, Input, notification } from "antd";
 import { Typography } from "antd";
 
 import { registerUser } from "../../store/auth/authSlice";
-import type { AppDispatch,  RootState } from "../../store/store";
+import type { AppDispatch, RootState } from "../../store/store";
 
 import {
   AuthFormContainer,

@@ -5,7 +5,6 @@ const API_BASE_URL = import.meta.env.VITE_ENV_API_BASE_URL;
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
-  _retryCount?: number;
 }
 
 const api = axios.create({
@@ -15,6 +14,18 @@ const api = axios.create({
   },
   withCredentials: true,
 });
+
+// Request interceptor to add the auth token to requests
+api.interceptors.request.use(
+  (config) => {
+    const accessToken = tokenService.getAccessToken();
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 // Response interceptor for handling token refresh and retries
 api.interceptors.response.use(
@@ -48,20 +59,10 @@ api.interceptors.response.use(
       }
     }
 
-    // Retry mechanism for network errors or 5xx responses
-    const shouldRetry =
-      !error.response || (error.response.status >= 500 && error.response.status < 600);
-
-    if (shouldRetry) {
-      originalRequest._retryCount = originalRequest._retryCount ?? 0;
-      const maxRetries = 2;
-      const retryDelay = 1000; // 1 second
-
-      if (originalRequest._retryCount < maxRetries) {
-        originalRequest._retryCount += 1;
-        await new Promise((resolve) => setTimeout(resolve, retryDelay));
-        return api(originalRequest);
-      }
+    // Retry mechanism has been disabled
+    // Simply log the error for network or server errors
+    if (!error.response || (error.response.status >= 500 && error.response.status < 600)) {
+      console.error('Server error or network issue:', error.message);
     }
 
     return Promise.reject(error);
