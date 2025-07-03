@@ -47,12 +47,14 @@ export const logoutUser = createAsyncThunk(
   'auth/logout',
   async (_, { dispatch }) => {
     try {
-      // Call the logout endpoint which will clear the refresh token cookie
       await authApi.logout();
-      // Optionally, reset user state
       dispatch(logout());
+      return { success: true };
     } catch (error) {
       console.error('Logout failed:', error);
+      dispatch(logout());
+      // Don't reject the promise - this ensures the UI flow continues
+      return { success: true, localOnly: true };
     }
   }
 );

@@ -14,7 +14,7 @@ export const tokenService = {
 
   refreshTokens: async () => {
     try {
-      const response = await api.get(`/auth/refresh-token`);
+      const response = await api.post(`/auth/refresh-token`);
 
       const { access_token } = response.data;
       tokenService.setAccessToken(access_token);

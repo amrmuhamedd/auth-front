@@ -12,7 +12,9 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true,
+  withCredentials: true, // This enables sending cookies in cross-origin requests
+  xsrfCookieName: 'XSRF-TOKEN', // These properties help with CSRF protection if your backend uses it
+  xsrfHeaderName: 'X-XSRF-TOKEN',
 });
 
 // Request interceptor to add the auth token to requests
